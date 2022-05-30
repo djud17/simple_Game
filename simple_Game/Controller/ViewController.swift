@@ -14,7 +14,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var gameButton: CustomButton!
     
     private var isGameStarted = false
+    
     private var gameTimeLeft: TimeInterval = 0
+    private var gameTimer: Timer?
+    
+    private var gameObjectTimer: Timer?
+    private let gameObjectDisplayDuration: TimeInterval = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +42,22 @@ class ViewController: UIViewController {
     }
     
     private func startGame() {
+        gameTimer?.invalidate()
+        gameTimer = Timer.scheduledTimer(timeInterval: 1,
+                                         target: self,
+                                         selector: #selector(gameTimerTick),
+                                         userInfo: nil,
+                                         repeats: true)
         gameTimeLeft = timeStepper.value
+        
+        gameObjectTimer?.invalidate()
+        gameObjectTimer = Timer.scheduledTimer(timeInterval: gameObjectDisplayDuration,
+                                               target: self,
+                                               selector: #selector(moveGameObject),
+                                               userInfo: nil,
+                                               repeats: true)
+        gameObjectTimer?.fire()
+        
         isGameStarted = true
         updateView()
     }
@@ -45,18 +65,33 @@ class ViewController: UIViewController {
     private func stopGame() {
         isGameStarted = false
         updateView()
+        gameTimer?.invalidate()
+        gameObjectTimer?.invalidate()
     }
     
     private func updateView() {
         timeStepper.isEnabled = !isGameStarted
         
         if isGameStarted {
-            timeLabel.text = "Remaining: \(Int(timeStepper.value)) sec"
+            timeLabel.text = "Remaining: \(Int(gameTimeLeft)) sec"
             gameButton.setTitle("Stop", for: .normal)
         } else {
             timeLabel.text = "Time: \(Int(timeStepper.value)) sec"
             gameButton.setTitle("Start", for: .normal)
         }
+    }
+    
+    @objc private func gameTimerTick() {
+        gameTimeLeft -= 1
+        if gameTimeLeft <= 0 {
+            stopGame()
+        } else {
+            updateView()
+        }
+    }
+    
+    @objc private func moveGameObject() {
+        
     }
 }
 
