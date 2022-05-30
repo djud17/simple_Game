@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var gameObject: CustomGameObject!
     @IBOutlet weak var gameObjectXConstraint: NSLayoutConstraint!
     @IBOutlet weak var gameObjectYConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scoreLabel: UILabel!
     
     private var isGameStarted = false
     
@@ -24,12 +25,15 @@ class ViewController: UIViewController {
     private var gameObjectTimer: Timer?
     private let gameObjectDisplayDuration: TimeInterval = 2
     
+    private var playerScore: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         gameFieldView.layer.borderWidth = 1
         gameFieldView.layer.borderColor = UIColor.red.cgColor
         gameFieldView.layer.cornerRadius = 10
+        updateView()
     }
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
@@ -45,6 +49,9 @@ class ViewController: UIViewController {
     }
     
     private func startGame() {
+        repositionImageWithTimer()
+        playerScore = 0
+        
         gameTimer?.invalidate()
         gameTimer = Timer.scheduledTimer(timeInterval: 1,
                                          target: self,
@@ -52,14 +59,6 @@ class ViewController: UIViewController {
                                          userInfo: nil,
                                          repeats: true)
         gameTimeLeft = timeStepper.value
-        
-        gameObjectTimer?.invalidate()
-        gameObjectTimer = Timer.scheduledTimer(timeInterval: gameObjectDisplayDuration,
-                                               target: self,
-                                               selector: #selector(moveGameObject),
-                                               userInfo: nil,
-                                               repeats: true)
-        gameObjectTimer?.fire()
         
         isGameStarted = true
         updateView()
@@ -70,10 +69,12 @@ class ViewController: UIViewController {
         updateView()
         gameTimer?.invalidate()
         gameObjectTimer?.invalidate()
+        scoreLabel.text = "Score: \(playerScore)"
     }
     
     private func updateView() {
         timeStepper.isEnabled = !isGameStarted
+        gameObject.isHidden = !isGameStarted
         
         if isGameStarted {
             timeLabel.text = "Remaining: \(Int(gameTimeLeft)) sec"
@@ -100,6 +101,23 @@ class ViewController: UIViewController {
         let maxY = gameFieldView.bounds.maxY - gameObject.frame.height
         gameObjectXConstraint.constant = CGFloat(arc4random_uniform(UInt32(maxX)))
         gameObjectYConstraint.constant = CGFloat(arc4random_uniform(UInt32(maxY)))
+    }
+    
+    private func repositionImageWithTimer() {
+        gameObjectTimer?.invalidate()
+        gameObjectTimer = Timer.scheduledTimer(timeInterval: gameObjectDisplayDuration,
+                                               target: self,
+                                               selector: #selector(moveGameObject),
+                                               userInfo: nil,
+                                               repeats: true)
+        gameObjectTimer?.fire()
+    }
+    
+    @IBAction func gameObjectTapped(_ sender: UITapGestureRecognizer) {
+        guard isGameStarted else { return }
+        
+        repositionImageWithTimer()
+        playerScore += 1
     }
 }
 

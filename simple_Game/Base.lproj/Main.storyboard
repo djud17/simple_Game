@@ -49,10 +49,14 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e6U-r9-aDL" customClass="CustomGameObject" customModule="simple_Game" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                         <color key="backgroundColor" systemColor="systemCyanColor"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="cAz-3Z-xaR"/>
                                             <constraint firstAttribute="height" constant="80" id="zvs-1O-S5E"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="aHG-xD-oW1" appends="YES" id="cfw-Fb-Zql"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -86,11 +90,17 @@
                         <outlet property="gameObject" destination="e6U-r9-aDL" id="3V1-or-Stt"/>
                         <outlet property="gameObjectXConstraint" destination="1yV-my-An4" id="Qm5-fm-Wlz"/>
                         <outlet property="gameObjectYConstraint" destination="ICV-d2-hGr" id="82Q-h6-XO3"/>
+                        <outlet property="scoreLabel" destination="Iqv-Oz-O3Q" id="f2R-GA-prQ"/>
                         <outlet property="timeLabel" destination="yxV-lE-FT6" id="bZm-Ka-rTu"/>
                         <outlet property="timeStepper" destination="u6C-gZ-MQE" id="Vb0-rB-6u2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="aHG-xD-oW1">
+                    <connections>
+                        <action selector="gameObjectTapped:" destination="BYZ-38-t0r" id="dFA-Bg-pA5"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="18.840579710144929" y="93.75"/>
         </scene>

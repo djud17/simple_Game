@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomGameObject: UIView {
+class CustomGameObject: UIView {    
     override func awakeFromNib() {
         super.awakeFromNib()
         
