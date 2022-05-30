@@ -12,6 +12,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var gameFieldView: UIView!
     @IBOutlet weak var timeStepper: UIStepper!
     @IBOutlet weak var gameButton: CustomButton!
+    @IBOutlet weak var gameObject: CustomGameObject!
+    @IBOutlet weak var gameObjectXConstraint: NSLayoutConstraint!
+    @IBOutlet weak var gameObjectYConstraint: NSLayoutConstraint!
     
     private var isGameStarted = false
     
@@ -78,6 +81,8 @@ class ViewController: UIViewController {
         } else {
             timeLabel.text = "Time: \(Int(timeStepper.value)) sec"
             gameButton.setTitle("Start", for: .normal)
+            gameObjectXConstraint.constant = 0
+            gameObjectYConstraint.constant = 0
         }
     }
     
@@ -91,7 +96,10 @@ class ViewController: UIViewController {
     }
     
     @objc private func moveGameObject() {
-        
+        let maxX = gameFieldView.bounds.maxX - gameObject.frame.width
+        let maxY = gameFieldView.bounds.maxY - gameObject.frame.height
+        gameObjectXConstraint.constant = CGFloat(arc4random_uniform(UInt32(maxX)))
+        gameObjectYConstraint.constant = CGFloat(arc4random_uniform(UInt32(maxY)))
     }
 }
 

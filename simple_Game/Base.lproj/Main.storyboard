@@ -46,13 +46,20 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wgl-lt-q30">
                                 <rect key="frame" x="10" y="167" width="394" height="631"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e6U-r9-aDL" customClass="CustomGameObject" customModule="simple_Game" customModuleProvider="target">
-                                        <rect key="frame" x="35" y="54" width="80" height="80"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e6U-r9-aDL" customClass="CustomGameObject" customModule="simple_Game" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                         <color key="backgroundColor" systemColor="systemCyanColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="cAz-3Z-xaR"/>
+                                            <constraint firstAttribute="height" constant="80" id="zvs-1O-S5E"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="e6U-r9-aDL" firstAttribute="leading" secondItem="Wgl-lt-q30" secondAttribute="leading" id="1yV-my-An4"/>
+                                    <constraint firstItem="e6U-r9-aDL" firstAttribute="top" secondItem="Wgl-lt-q30" secondAttribute="top" id="ICV-d2-hGr"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -76,6 +83,9 @@
                     <connections>
                         <outlet property="gameButton" destination="pLZ-jq-Ghg" id="Re2-At-WhD"/>
                         <outlet property="gameFieldView" destination="Wgl-lt-q30" id="UPc-7i-wen"/>
+                        <outlet property="gameObject" destination="e6U-r9-aDL" id="3V1-or-Stt"/>
+                        <outlet property="gameObjectXConstraint" destination="1yV-my-An4" id="Qm5-fm-Wlz"/>
+                        <outlet property="gameObjectYConstraint" destination="ICV-d2-hGr" id="82Q-h6-XO3"/>
                         <outlet property="timeLabel" destination="yxV-lE-FT6" id="bZm-Ka-rTu"/>
                         <outlet property="timeStepper" destination="u6C-gZ-MQE" id="Vb0-rB-6u2"/>
                     </connections>
