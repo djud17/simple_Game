@@ -28,7 +28,9 @@ class ViewController: UIViewController {
         gameFieldView.layer.borderWidth = 1
         gameFieldView.layer.borderColor = UIColor.red.cgColor
         gameFieldView.layer.cornerRadius = 10
-        updateView()
+        
+        gameObject.isHidden = !gameControlView.isGameStarted
+        
         gameControlView.startStopHandler = { [weak self] in
             self?.actionButtonTapped()
         }
@@ -36,16 +38,14 @@ class ViewController: UIViewController {
     }
     
     func actionButtonTapped() {
-        if gameControlView.isGameStarted {
-            stopGame()
-        } else {
-            startGame()
-        }
+        gameControlView.isGameStarted ? stopGame() : startGame()
     }
     
     private func startGame() {
         repositionImageWithTimer()
         playerScore = 0
+        scoreLabel.text = "Score: \(playerScore)"
+        gameControlView.isGameStarted = true
         
         gameTimer?.invalidate()
         gameTimer = Timer.scheduledTimer(timeInterval: 1,
@@ -55,20 +55,15 @@ class ViewController: UIViewController {
                                          repeats: true)
         gameControlView.gameTimeLeft = gameControlView.gameDuration
         
-        gameControlView.isGameStarted = true
-        updateView()
+        gameObject.isHidden = !gameControlView.isGameStarted
     }
     
     private func stopGame() {
         gameControlView.isGameStarted = false
-        updateView()
+        gameObject.isHidden = !gameControlView.isGameStarted
+        
         gameTimer?.invalidate()
         gameObjectTimer?.invalidate()
-        scoreLabel.text = "Score: \(playerScore)"
-    }
-    
-    private func updateView() {
-        gameObject.isHidden = !gameControlView.isGameStarted
     }
     
     @objc private func gameTimerTick() {
@@ -76,7 +71,7 @@ class ViewController: UIViewController {
         if gameControlView.gameTimeLeft <= 0 {
             stopGame()
         } else {
-            updateView()
+            gameObject.isHidden = !gameControlView.isGameStarted
         }
     }
     
@@ -102,6 +97,7 @@ class ViewController: UIViewController {
         
         repositionImageWithTimer()
         playerScore += 1
+        scoreLabel.text = "Score: \(playerScore)"
     }
 }
 
