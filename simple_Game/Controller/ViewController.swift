@@ -8,18 +8,13 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var gameControlView: GameControlViewClass!
     @IBOutlet weak var gameFieldView: UIView!
-    @IBOutlet weak var timeStepper: UIStepper!
-    @IBOutlet weak var gameButton: CustomButton!
     @IBOutlet weak var gameObject: CustomGameObject!
     @IBOutlet weak var gameObjectXConstraint: NSLayoutConstraint!
     @IBOutlet weak var gameObjectYConstraint: NSLayoutConstraint!
     @IBOutlet weak var scoreLabel: UILabel!
     
-    private var isGameStarted = false
-    
-    private var gameTimeLeft: TimeInterval = 0
     private var gameTimer: Timer?
     
     private var gameObjectTimer: Timer?
@@ -34,14 +29,14 @@ class ViewController: UIViewController {
         gameFieldView.layer.borderColor = UIColor.red.cgColor
         gameFieldView.layer.cornerRadius = 10
         updateView()
+        gameControlView.startStopHandler = { [weak self] in
+            self?.actionButtonTapped()
+        }
+        gameControlView.gameDuration = 20
     }
     
-    @IBAction func stepperValueChanged(_ sender: UIStepper) {
-        updateView()
-    }
-    
-    @IBAction func actionBtnTapped(_ sender: UIButton) {
-        if isGameStarted {
+    func actionButtonTapped() {
+        if gameControlView.isGameStarted {
             stopGame()
         } else {
             startGame()
@@ -58,14 +53,14 @@ class ViewController: UIViewController {
                                          selector: #selector(gameTimerTick),
                                          userInfo: nil,
                                          repeats: true)
-        gameTimeLeft = timeStepper.value
+        gameControlView.gameTimeLeft = gameControlView.gameDuration
         
-        isGameStarted = true
+        gameControlView.isGameStarted = true
         updateView()
     }
     
     private func stopGame() {
-        isGameStarted = false
+        gameControlView.isGameStarted = false
         updateView()
         gameTimer?.invalidate()
         gameObjectTimer?.invalidate()
@@ -73,23 +68,12 @@ class ViewController: UIViewController {
     }
     
     private func updateView() {
-        timeStepper.isEnabled = !isGameStarted
-        gameObject.isHidden = !isGameStarted
-        
-        if isGameStarted {
-            timeLabel.text = "Remaining: \(Int(gameTimeLeft)) sec"
-            gameButton.setTitle("Stop", for: .normal)
-        } else {
-            timeLabel.text = "Time: \(Int(timeStepper.value)) sec"
-            gameButton.setTitle("Start", for: .normal)
-            gameObjectXConstraint.constant = 0
-            gameObjectYConstraint.constant = 0
-        }
+        gameObject.isHidden = !gameControlView.isGameStarted
     }
     
     @objc private func gameTimerTick() {
-        gameTimeLeft -= 1
-        if gameTimeLeft <= 0 {
+        gameControlView.gameTimeLeft -= 1
+        if gameControlView.gameTimeLeft <= 0 {
             stopGame()
         } else {
             updateView()
@@ -114,7 +98,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func gameObjectTapped(_ sender: UITapGestureRecognizer) {
-        guard isGameStarted else { return }
+        guard gameControlView.isGameStarted else { return }
         
         repositionImageWithTimer()
         playerScore += 1
