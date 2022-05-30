@@ -15,3 +15,13 @@ class CustomGameObject: UIView {
         layer.cornerRadius = self.bounds.height / 2
     }
 }
+
+class CustomButton: UIButton {
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        layer.borderColor = UIColor.red.cgColor
+        layer.borderWidth = 1
+        layer.cornerRadius = 10
+    }
+}
